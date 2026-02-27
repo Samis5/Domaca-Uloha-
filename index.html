@@ -1,48 +1,154 @@
-<div class="card"
-     onclick="openModal(
-        'Starlight Mojito',
-        'https://boozeapi.com/api/img/cocktails/583.jpg',
-        '- Vodka ()',
-        `
-        <div class='review'>
-            <div class='stars'>
-                ★ ★ ★ ★ ★
-            </div>
-            <strong>Kamil</strong><br>
-            Skvelé farby a chuť!
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <title>Drink Cards</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #111;
+            color: white;
+            display: flex;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .card {
+            width: 250px;
+            background: #1e1e1e;
+            border-radius: 12px;
+            padding: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-align: center;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        .card img {
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        .avg-stars {
+            color: gold;
+            margin-bottom: 10px;
+        }
+
+        /* MODAL */
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.8);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #222;
+            padding: 20px;
+            border-radius: 12px;
+            width: 400px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .close {
+            float: right;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        .review {
+            margin-top: 15px;
+            padding: 10px;
+            background: #333;
+            border-radius: 8px;
+        }
+
+        .stars {
+            color: gold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card" id="starlight-card">
+        <div class="avg-stars">
+            ★ ★ ★ ★ ☆
         </div>
 
-        <div class='review'>
-            <div class='stars'>
-                ★ ★ ★ ☆ ☆
-            </div>
-            <strong>Tomáš</strong><br>
-            Za mňa priemer, ale pekne vyzerá.
-        </div>
+        <img src="https://boozeapi.com/api/img/cocktails/583.jpg" alt="Starlight Mojito">
 
-        <div class='review'>
-            <div class='stars'>
-                ★ ★ ★ ★ ☆
-            </div>
-            <strong>Lucia</strong><br>
-            Veľmi osviežujúci, ideálny na leto.
-        </div>
-
-        <div class='review'>
-            <div class='stars'>
-                ★ ★ ★ ★ ★
-            </div>
-            <strong>Marek</strong><br>
-            Perfektný drink. Určite si ho dám znova.
-        </div>
-        `
-     )">
-
-    <div class="avg-stars">
-        ★ ★ ★ ★ ☆
+        <h3>Starlight Mojito</h3>
     </div>
 
-    <img src="https://boozeapi.com/api/img/cocktails/583.jpg" alt="Starlight Mojito">
 
-    <h3>Starlight Mojito</h3>
-</div>
+    <!-- MODAL -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">✖</span>
+            <h2 id="modal-title"></h2>
+            <img id="modal-img" style="width:100%; border-radius:10px;">
+            <p id="modal-ingredients"></p>
+            <div id="modal-reviews"></div>
+        </div>
+    </div>
+
+
+    <script>
+        const reviewsHTML = `
+            <div class='review'>
+                <div class='stars'>★ ★ ★ ★ ★</div>
+                <strong>Kamil</strong><br>
+                Skvelé farby a chuť!
+            </div>
+
+            <div class='review'>
+                <div class='stars'>★ ★ ★ ☆ ☆</div>
+                <strong>Tomáš</strong><br>
+                Za mňa priemer, ale pekne vyzerá.
+            </div>
+
+            <div class='review'>
+                <div class='stars'>★ ★ ★ ★ ☆</div>
+                <strong>Lucia</strong><br>
+                Veľmi osviežujúci, ideálny na leto.
+            </div>
+
+            <div class='review'>
+                <div class='stars'>★ ★ ★ ★ ★</div>
+                <strong>Marek</strong><br>
+                Perfektný drink. Určite si ho dám znova.
+            </div>
+        `;
+
+        document.getElementById("starlight-card").addEventListener("click", function () {
+            openModal(
+                "Starlight Mojito",
+                "https://boozeapi.com/api/img/cocktails/583.jpg",
+                "- Vodka ()",
+                reviewsHTML
+            );
+        });
+
+        function openModal(title, img, ingredients, reviews) {
+            document.getElementById("modal-title").innerText = title;
+            document.getElementById("modal-img").src = img;
+            document.getElementById("modal-ingredients").innerText = ingredients;
+            document.getElementById("modal-reviews").innerHTML = reviews;
+            document.getElementById("modal").style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById("modal").style.display = "none";
+        }
+    </script>
+
+</body>
+</html>
