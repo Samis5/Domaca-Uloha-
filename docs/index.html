@@ -1,154 +1,136 @@
 <!DOCTYPE html>
 <html lang="sk">
 <head>
-    <meta charset="UTF-8">
-    <title>Drink Cards</title>
+<meta charset="UTF-8">
+<title>Luxusné Koktaily</title>
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #111;
-            color: white;
-            display: flex;
-            justify-content: center;
-            padding: 40px;
-        }
+<style>
+body{
+    margin:0;font-family:'Segoe UI',sans-serif;
+    background:linear-gradient(120deg,#0a0a1f,#1a1a3d);
+    color:white;overflow-x:hidden;
+}
+h1{
+    text-align:center;font-size:80px;font-weight:900;
+    text-transform:uppercase;letter-spacing:2px;
+    text-shadow:0 0 10px #ff00cc,0 0 20px #00f7ff,0 0 30px #ff00cc,0 0 40px #00ff00;
+    animation:pulse 2s infinite;margin:40px 0;cursor:pointer;
+}
+@keyframes pulse{
+0%,100%{text-shadow:0 0 10px #ff00cc,0 0 20px #00f7ff,0 0 30px #ff00cc,0 0 40px #00ff00;}
+50%{text-shadow:0 0 20px #ff00cc,0 0 40px #00f7ff,0 0 60px #ff00cc,0 0 80px #00ff00;}
+}
+.grid{display:flex;flex-wrap:wrap;justify-content:center;gap:30px;padding:20px;}
+.card{
+    position:relative;width:280px;border-radius:15px;overflow:hidden;cursor:pointer;
+    transition:0.4s;box-shadow:0 0 20px rgba(0,255,255,0.3);
+}
+.card:hover{transform:scale(1.07);box-shadow:0 0 40px #ff00cc,0 0 80px #00f7ff;}
+.card img{width:100%;height:230px;object-fit:cover;}
+.card h3{
+    position:absolute;bottom:0;width:100%;text-align:center;padding:12px 0;
+    font-size:22px;font-weight:800;
+    background:linear-gradient(90deg,rgba(255,0,204,0.6),rgba(0,247,255,0.6));
+}
+.avg-stars{text-align:center;color:gold;margin-bottom:10px;}
 
-        .card {
-            width: 250px;
-            background: #1e1e1e;
-            border-radius: 12px;
-            padding: 15px;
-            cursor: pointer;
-            transition: 0.3s;
-            text-align: center;
-        }
-
-        .card:hover {
-            transform: scale(1.05);
-        }
-
-        .card img {
-            width: 100%;
-            border-radius: 10px;
-        }
-
-        .avg-stars {
-            color: gold;
-            margin-bottom: 10px;
-        }
-
-        /* MODAL */
-
-        .modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.8);
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background: #222;
-            padding: 20px;
-            border-radius: 12px;
-            width: 400px;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-
-        .close {
-            float: right;
-            cursor: pointer;
-            font-size: 20px;
-        }
-
-        .review {
-            margin-top: 15px;
-            padding: 10px;
-            background: #333;
-            border-radius: 8px;
-        }
-
-        .stars {
-            color: gold;
-        }
-    </style>
+.modal{
+    display:none;position:fixed;inset:0;
+    background:rgba(0,0,0,0.95);
+    justify-content:center;align-items:center;z-index:1000;
+}
+.modal-content{
+    background:#111;border:2px solid #00f7ff;border-radius:20px;
+    width:90%;max-width:650px;max-height:85vh;overflow-y:auto;
+    padding:20px;box-shadow:0 0 40px #ff00cc;
+}
+.modal-content img{width:100%;border-radius:10px;margin-bottom:15px;}
+.recipe{white-space:pre-line;color:#00f7ff;margin-top:10px;}
+.review{border-top:1px solid #333;padding:10px 0;font-size:0.9em;}
+.stars{color:gold;}
+.close{text-align:right;cursor:pointer;font-size:18px;color:#ff00cc;}
+</style>
 </head>
+
 <body>
 
-    <div class="card" id="starlight-card">
-        <div class="avg-stars">
-            ★ ★ ★ ★ ☆
-        </div>
+<h1 id="main-title">Luxusné Koktaily</h1>
 
-        <img src="https://boozeapi.com/api/img/cocktails/583.jpg" alt="Starlight Mojito">
+<div class="grid" id="drink-container"></div>
 
-        <h3>Starlight Mojito</h3>
+<div id="modal" class="modal" onclick="closeModal()">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <div class="close" onclick="closeModal()">Zatvoriť</div>
+        <h2 id="modal-title"></h2>
+        <img id="modal-img">
+        <h3>Recept</h3>
+        <div id="modal-recipe" class="recipe"></div>
+        <h3>Recenzie</h3>
+        <div id="modal-reviews"></div>
     </div>
+</div>
 
+<script>
+const cocktails = [
+{
+    luxury_name:"Starlight Mojito",
+    image:"https://boozeapi.com/api/img/cocktails/583.jpg",
+    recipe:"- 50ml vodka\n- 20ml limetková šťava\n- 15ml sirup\n- mäta",
+    reviews:[
+        {name:"Kamil",rating:5,text:"Skvelé farby a chuť!"},
+        {name:"Tomáš",rating:3,text:"Za mňa priemer."},
+        {name:"Lucia",rating:4,text:"Osviežujúci drink."}
+    ]
+}
+];
 
-    <!-- MODAL -->
-    <div class="modal" id="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal()">✖</span>
-            <h2 id="modal-title"></h2>
-            <img id="modal-img" style="width:100%; border-radius:10px;">
-            <p id="modal-ingredients"></p>
-            <div id="modal-reviews"></div>
-        </div>
-    </div>
+function renderDrinks(){
+    const container=document.getElementById("drink-container");
+    cocktails.forEach(drink=>{
+        const avg=Math.round(
+            drink.reviews.reduce((a,b)=>a+b.rating,0)/drink.reviews.length
+        );
 
+        const stars="★".repeat(avg)+"☆".repeat(5-avg);
 
-    <script>
-        const reviewsHTML = `
-            <div class='review'>
-                <div class='stars'>★ ★ ★ ★ ★</div>
-                <strong>Kamil</strong><br>
-                Skvelé farby a chuť!
-            </div>
-
-            <div class='review'>
-                <div class='stars'>★ ★ ★ ☆ ☆</div>
-                <strong>Tomáš</strong><br>
-                Za mňa priemer, ale pekne vyzerá.
-            </div>
-
-            <div class='review'>
-                <div class='stars'>★ ★ ★ ★ ☆</div>
-                <strong>Lucia</strong><br>
-                Veľmi osviežujúci, ideálny na leto.
-            </div>
-
-            <div class='review'>
-                <div class='stars'>★ ★ ★ ★ ★</div>
-                <strong>Marek</strong><br>
-                Perfektný drink. Určite si ho dám znova.
-            </div>
+        const card=document.createElement("div");
+        card.className="card";
+        card.innerHTML=`
+            <div class="avg-stars">${stars}</div>
+            <img src="${drink.image}">
+            <h3>${drink.luxury_name}</h3>
         `;
 
-        document.getElementById("starlight-card").addEventListener("click", function () {
-            openModal(
-                "Starlight Mojito",
-                "https://boozeapi.com/api/img/cocktails/583.jpg",
-                "- Vodka ()",
-                reviewsHTML
-            );
-        });
+        card.onclick=()=>openModal(drink);
+        container.appendChild(card);
+    });
+}
 
-        function openModal(title, img, ingredients, reviews) {
-            document.getElementById("modal-title").innerText = title;
-            document.getElementById("modal-img").src = img;
-            document.getElementById("modal-ingredients").innerText = ingredients;
-            document.getElementById("modal-reviews").innerHTML = reviews;
-            document.getElementById("modal").style.display = "flex";
-        }
+function openModal(drink){
+    document.getElementById("modal-title").innerText=drink.luxury_name;
+    document.getElementById("modal-img").src=drink.image;
+    document.getElementById("modal-recipe").innerText=drink.recipe;
 
-        function closeModal() {
-            document.getElementById("modal").style.display = "none";
-        }
-    </script>
+    let reviewsHTML="";
+    drink.reviews.forEach(r=>{
+        reviewsHTML+=`
+            <div class="review">
+                <div class="stars">${"★".repeat(r.rating)}${"☆".repeat(5-r.rating)}</div>
+                <strong>${r.name}</strong><br>${r.text}
+            </div>
+        `;
+    });
+
+    document.getElementById("modal-reviews").innerHTML=reviewsHTML;
+    document.getElementById("modal").style.display="flex";
+}
+
+function closeModal(){
+    document.getElementById("modal").style.display="none";
+}
+
+renderDrinks();
+</script>
 
 </body>
 </html>
