@@ -1,0 +1,1 @@
+caute toto je moj projekt a kludne si ho mozete pozriet :)
